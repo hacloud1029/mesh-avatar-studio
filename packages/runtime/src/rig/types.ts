@@ -53,7 +53,9 @@ export interface Rig {
     breathBand: Band; rollBand: Band; chest: Ellipse; shoulders: Ellipse[];
   };
   face: Record<'nose' | 'mouth' | 'eyeA' | 'eyeB' | 'earL' | 'earR', Ellipse> & {
-    brow: Ellipse & { band: Band };
+    /** pair: x centres of the image-left and image-right brow when both are visible;
+     * lift: px per unit browY (default 7); tilt: radians per unit browAngle (default 0.12). */
+    brow: Ellipse & { band: Band; pair?: Band; lift?: number; tilt?: number };
     jaw: Ellipse & { band: Band };
   };
   buns?: Partial<Record<'bunL' | 'bunR', Ellipse>>;

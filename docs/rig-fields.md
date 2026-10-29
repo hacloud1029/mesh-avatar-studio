@@ -10,7 +10,7 @@ radii and mesh cell sizes must be positive. Mesh cell sizes and fine-mesh rectan
 coordinates must be integers. Accessory boxes must be integer rectangles inside the image. A band is `[start, end]` with `start < end`.
 Ellipses are smooth influence regions, not hard cut-out boundaries.
 
-Only `buns`, `strands`, `accessories`, `hand` and `view.gazeCenter` are optional. Omit absent
+Only `buns`, `strands`, `accessories`, `hand`, `view.gazeCenter` and `face.brow.pair/lift/tilt` are optional. Omit absent
 optional groups. Required regions must still be placed even if their animation will be small.
 The initial draft has empty eye polygons and is intentionally invalid until they are traced.
 See [agent-guide.md](agent-guide.md) for the process and [rig-mapping.md](rig-mapping.md) for
@@ -74,6 +74,9 @@ the engine mapping. Do not copy the example illustration's coordinates into a ne
 | `face.brow.rx` | Horizontal influence radius, px; Brow influence ellipse, px; cover the visible eyebrow region, avoiding hair. |
 | `face.brow.ry` | Vertical influence radius, px; Brow influence ellipse, px; cover the visible eyebrow region, avoiding hair. |
 | `face.brow.band` | Y range, px, fading brow movement from full to zero below brow. |
+| `face.brow.pair` | Optional `[left, right]` x centres, px, of the image-left and image-right brow when both are visible. Each brow then tilts about its own centre, mirrored, so the brow angle lowers or raises both inner ends together; without it the brow region tilts about `face.brow.cx`. |
+| `face.brow.lift` | Optional brow lift per unit brow Y, px; default `7`. |
+| `face.brow.tilt` | Optional brow tilt per unit brow angle, radians; default `0.12`. |
 | `face.jaw.cx` | Horizontal centre, px; Jaw influence ellipse, px; centre just above chin, cover lower jaw. |
 | `face.jaw.cy` | Vertical centre, px; Jaw influence ellipse, px; centre just above chin, cover lower jaw. |
 | `face.jaw.rx` | Horizontal influence radius, px; Jaw influence ellipse, px; centre just above chin, cover lower jaw. |

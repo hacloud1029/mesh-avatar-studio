@@ -212,10 +212,17 @@ export function createRig(rig) {
     p[0] += (phys.bunL[0] * w.bunL + phys.bunR[0] * w.bunR) * g;
     p[1] += (phys.bunL[1] * w.bunL + phys.bunR[1] * w.bunR) * g;
     // brows
-    p[1] -= P.browY * 7 * w.brow;
+    const brow = rig.face.brow;
+    p[1] -= P.browY * (brow.lift ?? 7) * w.brow;
     if (w.brow > 0.01) {
-      const a = P.browAngle * 0.12 * w.brow;
-      p[1] += (x - rig.face.brow.cx) * Math.sin(a);
+      const a = P.browAngle * (brow.tilt ?? 0.12) * w.brow;
+      // with both brows visible (pair), each one turns about its own centre, mirrored,
+      // so a positive angle lowers both inner ends instead of see-sawing the pair
+      // (the skin between them follows the inner ends rather than swinging further)
+      const pair = brow.pair;
+      const lim = pair ? (pair[1] - pair[0]) * 0.2 : Infinity;
+      const arm = !pair ? x - brow.cx : Math.min(lim, x < (pair[0] + pair[1]) / 2 ? x - pair[0] : pair[1] - x);
+      p[1] += arm * Math.sin(a);
     }
     p[1] += P.mouthOpen * 3.5 * w.jaw;
     // head turn, per part: nose and mouth travel further than the eyes, the far eye
