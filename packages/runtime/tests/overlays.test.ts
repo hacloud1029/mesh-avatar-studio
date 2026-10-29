@@ -106,3 +106,26 @@ test('opaqueRect pads the opaque bounds and returns null for a transparent image
   expect(opaqueRect(alpha, 100, 50)).toEqual([24, 14, 43, 18]);
   expect(opaqueRect(new Uint8Array(100), 10, 10)).toBeNull();
 });
+
+test('a rigid overlay shares the per-feature depth weights of its centre', () => {
+  const renderer = { addLayer: vi.fn(() => ({ visible: false })) };
+  const buildGrid = vi.fn(() => ({ rest: new Float32Array([0, 0, 7, 7]), pos: new Float32Array(4) }));
+  const alpha = new Uint8Array(64).fill(255);
+  const weightsAt = (x: number, y: number) => ({ nose: x / 10, eyeA: y / 10, head: x + y, brow: 1, jaw: 1 });
+  const collect = (rigid: boolean) => {
+    const overlays = createOverlayLayers(renderer, { overlays: [{ name: 'glasses', rigid }] }, { glasses: { width: 8, height: 8 } },
+      buildGrid, () => alpha, weightsAt, 4, 8, 8, () => ({}));
+    const seen: Record<string, number>[] = [];
+    overlays.set(['glasses']);
+    overlays.update({}, {}, (x: number, y: number, w: Record<string, number>, _p: unknown, _phys: unknown, out: number[]) => {
+      seen.push(w); out[0] = x; out[1] = y;
+    }, [0, 0]);
+    return seen;
+  };
+  const [a, b] = collect(true);
+  // depth weights come from the centre of the opaque rect (4, 4); positional weights stay per vertex
+  expect(a).toMatchObject({ nose: 0.4, eyeA: 0.4, head: 0, brow: 0, jaw: 0 });
+  expect(b).toMatchObject({ nose: 0.4, eyeA: 0.4, head: 14 });
+  const [c, d] = collect(false);
+  expect(c.nose).not.toBe(d.nose);
+});

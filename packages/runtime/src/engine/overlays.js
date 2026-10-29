@@ -44,8 +44,13 @@ export function createOverlayLayers(renderer, sheet, images, buildGrid, alphaOf,
     for (let y = 0; y < rh; y++) cropped.set(alpha.subarray((ry + y) * img.width + rx, (ry + y) * img.width + rx + rw), y * rw);
     const mesh = buildGrid(rect, cell, cropped, rw);
     const weights = [];
+    // A rigid overlay (glasses) takes the per-feature depth offsets of its centre everywhere, so
+    // the nose and eye parallax of a head turn moves the frame as one piece instead of bending it.
+    const centre = item.rigid ? baseWeights(rx + rw / 2, ry + rh / 2, 0) : null;
+    const RIGID = ['nose', 'mouth', 'eyeA', 'eyeB', 'earL', 'earR', 'bunL', 'bunR'];
     for (let i = 0; i < mesh.rest.length; i += 2) {
       const w = baseWeights(mesh.rest[i], mesh.rest[i + 1], 0);
+      if (centre) for (const key of RIGID) w[key] = centre[key];
       weights.push({ ...w, brow: 0, jaw: 0 });
     }
     const layer = renderer.addLayer(`overlay_${item.name}`, crop(img, rect), mesh);

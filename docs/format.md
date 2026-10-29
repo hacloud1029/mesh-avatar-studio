@@ -183,6 +183,8 @@ names must be unique. Each image lives under `built/overlays/`, is the same size
 The runtime meshes only the opaque area (plus a few pixels of padding), so a small
 accessory stays cheap to animate.
 
+An entry may set `"rigid": true` (for glasses and other stiff accessories): every point then takes the per-feature depth offsets of the drawing's centre, so a head turn moves it as one piece instead of bending it around the nose and eyes.
+
 All overlays start hidden. `setOverlays(['glasses'])` shows the listed overlays and hides
 the others; unknown names are ignored, and `setOverlays([])` hides them all. Hidden
 overlays are not deformed. Overlays are drawn above the drawn eye and mouth variants and

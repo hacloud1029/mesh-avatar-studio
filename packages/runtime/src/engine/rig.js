@@ -224,10 +224,12 @@ export function createRig(rig) {
       const arm = !pair ? x - brow.cx : Math.min(lim, x < (pair[0] + pair[1]) / 2 ? x - pair[0] : pair[1] - x);
       p[1] += arm * Math.sin(a);
     }
-    p[1] += P.mouthOpen * 3.5 * w.jaw;
+    p[1] += P.mouthOpen * (rig.face.jaw.drop ?? 3.5) * w.jaw;
     // head turn, per part: nose and mouth travel further than the eyes, the far eye
     // narrows and the near eye widens, the ears and buns slide the other way
-    const ax = P.angleX / 30, ay = P.angleY / 30;
+    // (head.parallax scales these per-part offsets for a deeper-looking turn)
+    const depth = HEAD.parallax ?? 1;
+    const ax = P.angleX / 30 * depth, ay = P.angleY / 30 * depth;
     p[0] += ax * (8 * w.nose + 5 * w.mouth) + (x - rig.face.eyeA.cx) * 0.12 * ax * w.eyeA - (x - rig.face.eyeB.cx) * 0.12 * ax * w.eyeB
       - ax * 9 * w.earR + ax * 4 * w.earL - ax * 10 * (w.bunL + w.bunR);
     p[1] -= ay * (6 * w.nose + 3 * w.mouth);

@@ -47,6 +47,8 @@ export interface Rig {
   head: Ellipse & {
     shiftX: number; shiftY: number; pivotX: number; pivotY: number;
     maxRoll: number; weightBand: Band; turnBand: Band;
+    /** Optional multiplier for the per-part depth offsets of a head turn (default 1). */
+    parallax?: number;
   };
   body: {
     pivotX: number; pivotY: number; maxRoll: number;
@@ -56,7 +58,8 @@ export interface Rig {
     /** pair: x centres of the image-left and image-right brow when both are visible;
      * lift: px per unit browY (default 7); tilt: radians per unit browAngle (default 0.12). */
     brow: Ellipse & { band: Band; pair?: Band; lift?: number; tilt?: number };
-    jaw: Ellipse & { band: Band };
+    /** drop: px the chin lowers at a fully open mouth (default 3.5). */
+    jaw: Ellipse & { band: Band; drop?: number };
   };
   buns?: Partial<Record<'bunL' | 'bunR', Ellipse>>;
   eyes: Eye[];

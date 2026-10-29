@@ -10,7 +10,7 @@ radii and mesh cell sizes must be positive. Mesh cell sizes and fine-mesh rectan
 coordinates must be integers. Accessory boxes must be integer rectangles inside the image. A band is `[start, end]` with `start < end`.
 Ellipses are smooth influence regions, not hard cut-out boundaries.
 
-Only `buns`, `strands`, `accessories`, `hand`, `view.gazeCenter` and `face.brow.pair/lift/tilt` are optional. Omit absent
+Only `buns`, `strands`, `accessories`, `hand`, `view.gazeCenter`, `head.parallax`, `face.jaw.drop` and `face.brow.pair/lift/tilt` are optional. Omit absent
 optional groups. Required regions must still be placed even if their animation will be small.
 The initial draft has empty eye polygons and is intentionally invalid until they are traced.
 See [agent-guide.md](agent-guide.md) for the process and [rig-mapping.md](rig-mapping.md) for
@@ -32,6 +32,7 @@ the engine mapping. Do not copy the example illustration's coordinates into a ne
 | `head.maxRoll` | Roll magnitude at a ±30° head pose, radians; start near `0.15`. |
 | `head.weightBand` | Y range, px, where head influence fades from full to zero; below chin to collarbone. |
 | `head.turnBand` | Y range, px, where face-turn displacement fades; below chin into upper chest. |
+| `head.parallax` | Optional multiplier for the per-feature depth offsets of a head turn (nose, mouth, eyes, ears, buns), unitless; default `1`. Raise it with `shiftX`/`shiftY` for a deeper-looking turn. |
 | `body.pivotX` | Body roll pivot x, px; middle of the lower torso. |
 | `body.pivotY` | Body roll pivot y, px; near the bottom of the image. |
 | `body.maxRoll` | Body rotation at a ±10° body pose, radians; start near `0.035`. |
@@ -82,6 +83,7 @@ the engine mapping. Do not copy the example illustration's coordinates into a ne
 | `face.jaw.rx` | Horizontal influence radius, px; Jaw influence ellipse, px; centre just above chin, cover lower jaw. |
 | `face.jaw.ry` | Vertical influence radius, px; Jaw influence ellipse, px; centre just above chin, cover lower jaw. |
 | `face.jaw.band` | Y range, px, fading jaw influence from zero to full toward chin. |
+| `face.jaw.drop` | Optional distance the chin lowers at a fully open mouth, px; default `3.5`. |
 | `buns.bunL.cx` | Horizontal centre, px; Optional image-left bun ellipse, px; include whole bun, exclude ribbons. |
 | `buns.bunL.cy` | Vertical centre, px; Optional image-left bun ellipse, px; include whole bun, exclude ribbons. |
 | `buns.bunL.rx` | Horizontal influence radius, px; Optional image-left bun ellipse, px; include whole bun, exclude ribbons. |
